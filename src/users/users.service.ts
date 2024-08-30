@@ -1,23 +1,22 @@
-import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { User } from './user.model';
-// import { CreateUserDto } from './dto/create-user.dto';
+import { Injectable } from '@nestjs/common'
+import { InjectModel } from '@nestjs/mongoose'
+import { Model } from 'mongoose'
+import { User } from './user.model'
 
 @Injectable()
 export class UsersService {
 
     constructor(
-        @InjectModel('User') private userModelNestreact: Model<User>) {}
+        @InjectModel('User') private userMongo: Model<User>) {}
 
-    async createUser(id){
-        const user = await this.userModelNestreact.create({id: Number(id)})
+    async createUser(id: number){
+        const user = await this.userMongo.create({id: id})
         // console.log('User createUser: ' + user)
         return user
     }
 
-    async getUser(id){
-        const user = await this.userModelNestreact.findOne({id: Number(id)}, {activBot: 0})
+    async getUser(id: number){
+        const user = await this.userMongo.findOne({id: id}, {activBot: 0})
         // console.log('User getUser: ' + user)
         return user
     }

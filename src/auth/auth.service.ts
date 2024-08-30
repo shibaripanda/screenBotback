@@ -3,7 +3,8 @@ import { AuthDataValidator } from '@telegram-auth/server'
 import { urlStrToAuthDataMap } from '@telegram-auth/server/utils'
 import { JwtService } from '@nestjs/jwt'
 import { UsersService } from 'src/users/users.service'
-// import { CreateUserDto } from 'src/users/dto/create-user.dto'
+import { ReqestAuthDto } from './dto/request-auth.dto'
+import { ReqestUserDto } from 'src/users/dto/request-user.dto'
 
 @Injectable()
 export class AuthService {
@@ -12,7 +13,7 @@ export class AuthService {
         private usersService: UsersService,
         private jwtService: JwtService){}
     
-    async login(data: any){
+    async login(data: ReqestAuthDto){
         const res = await this.telegramAuth(data)
         if(res){
             let user = await this.usersService.getUser(res.id)
@@ -29,15 +30,13 @@ export class AuthService {
             throw new UnauthorizedException({message: 'Нет авторизации'})
         }
     }
-
-    private async generateToken(user){
+    private async generateToken(user: ReqestUserDto){
         const payload = {id: user.id, _id: user._id}
         return {
             token: this.jwtService.sign(payload)
         }
     }
-
-    async telegramAuth(data: any){
+    private async telegramAuth(data: ReqestAuthDto){
         const validator = new AuthDataValidator({ botToken: process.env.BOT_TOKEN })
         let dataCheck: string = '/aut/login?'
         for (const key in data) {

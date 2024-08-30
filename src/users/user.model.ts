@@ -5,6 +5,6 @@ export const UsersSchema = new mongoose.Schema({
 }, {timestamps: true})
 
 export interface User {
-  id: number,
-  _id: any
+   id: number,
+  _id: string
 }

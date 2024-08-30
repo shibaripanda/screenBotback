@@ -1,6 +1,7 @@
 import { Controller, Get, UseGuards, Request } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { ReqestUserDto } from './dto/request-user.dto';
 
 @Controller('/user')
 export class UsersController {
@@ -11,7 +12,8 @@ export class UsersController {
     @UseGuards(JwtAuthGuard)
     @Get()
     getUser(@Request() req: any){
-        return this.ordersService.getUser(req.user.id)
+        const user: ReqestUserDto = req.user
+        return this.ordersService.getUser(user.id)
     }
 
     // @UseGuards(JwtAuthGuard)
