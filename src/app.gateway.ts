@@ -1,4 +1,4 @@
-import { UseGuards } from '@nestjs/common';
+import { Request, UseGuards } from '@nestjs/common';
 import {
   OnGatewayConnection,
   OnGatewayDisconnect,
@@ -26,19 +26,16 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
 
   
   @WebSocketServer() server: Server;
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @SubscribeMessage('send')
-
   async handleSendMessage(client: Socket, payload: any): Promise<void> {
-    console.log('wwwwwwwww')
-    console.log(payload)
-    console.log(client.handshake.auth.token)
+    console.log('send ', payload)
+    // console.log(req.user)
+    // console.log(client.handshake.auth.token)
     // await this.appService.createMessage(payload);
     // const all = (await this.appService.getMessage()).reverse().map(item => item.text)
-    // this.server.emit('res', all);
+    this.server.emit('res', 'связь прошла')
   }
-
-
 
   afterInit(server: any) {
     console.log('server')
