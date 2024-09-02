@@ -21,8 +21,4 @@ export class UsersService {
         return user
     }
 
-    // async updateUser(id: any, dto: any){
-    //     await this.userModelNestreact.updateOne({_id: id}, dto)
-    // }
-
 }

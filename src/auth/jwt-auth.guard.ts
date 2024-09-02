@@ -1,6 +1,6 @@
-import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import { Observable } from 'rxjs';
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common'
+import { JwtService } from '@nestjs/jwt'
+import { Observable } from 'rxjs'
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
@@ -8,7 +8,7 @@ export class JwtAuthGuard implements CanActivate {
 
     canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
         const req = context.switchToHttp().getRequest()
-        console.log(req.handshake)
+        // console.log(req.handshake)
         console.log('sdsd')
         try{
             const authHeader = req.handshake.auth.token.Authorization
@@ -21,6 +21,7 @@ export class JwtAuthGuard implements CanActivate {
                 // throw new UnauthorizedException({message: 'Нет авторизации'})
             }
             const user = this.jwtService.verify(token)
+            console.log(user.id)
             req.user = user
             console.log('Авторизация true')
             return true

@@ -1,4 +1,4 @@
-import { Request, UseGuards } from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
 import {
   OnGatewayConnection,
   OnGatewayDisconnect,
@@ -8,8 +8,9 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { AppService } from 'src/app.service';
+// import { AppService } from 'src/app.service';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
+import { UsersService } from './users/users.service';
 // import { CreateMessDto } from 'src/dto/create-mess.dto';
 
 @WebSocketGateway(
@@ -22,28 +23,29 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
 
 export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
 
-  constructor(private appService: AppService) {}
+  constructor(private usersService: UsersService) {}
 
   
   @WebSocketServer() server: Server;
-  // @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @SubscribeMessage('send')
   async handleSendMessage(client: Socket, payload: any): Promise<void> {
+    const user = client['user']
     console.log('send ', payload)
-    // console.log(req.user)
-    // console.log(client.handshake.auth.token)
-    // await this.appService.createMessage(payload);
-    // const all = (await this.appService.getMessage()).reverse().map(item => item.text)
-    this.server.emit('res', 'связь прошла')
+    console.log(user)
+    const res = await this.usersService.getUser(user.id)
+    this.server.emit('res', res)
   }
 
-  afterInit(server: any) {
-    console.log('server')
+  afterInit() {
+    console.log('WebSocket server start')
   }
   handleConnection(client: Socket) {
+    console.log(client.id)
     console.log('connect')
   }
   handleDisconnect(client: Socket) {
+    console.log(client.id)
     console.log('dicconnect')
   }
 }
