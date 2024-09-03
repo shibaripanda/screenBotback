@@ -1,16 +1,19 @@
-import { Module } from '@nestjs/common';
-// import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { MongooseModule } from '@nestjs/mongoose';
-import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module';
-import { AppGateway } from './app.gateway';
+import { Module } from '@nestjs/common'
+// import { AppController } from './app.controller'
+import { AppService } from './app.service'
+import { MongooseModule } from '@nestjs/mongoose'
+import { AuthModule } from './auth/auth.module'
+import { UsersModule } from './users/users.module'
+import { AppGateway } from './app.gateway'
+import { BotModule } from './bot/bot.module';
+// import { BotService } from './bot/bot.service'
 
 @Module({
   imports: [
     MongooseModule.forRoot(process.env.MONGO_TOKEN), 
-    AuthModule, 
-    UsersModule
+    UsersModule, 
+    BotModule,
+    AuthModule
   ],
   // controllers: [AppController],
   providers: [AppService, AppGateway],

@@ -23,7 +23,7 @@ export class AuthService {
             if(user){
                return this.generateToken(user) 
             }
-            console.log(user)
+            // console.log(user)
             throw new HttpException('Что-то пошло не так, попробуйте еще раз', HttpStatus.BAD_REQUEST)
         }
         else{

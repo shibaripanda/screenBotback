@@ -11,6 +11,7 @@ import { Server, Socket } from 'socket.io';
 // import { AppService } from 'src/app.service';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { UsersService } from './users/users.service';
+import { BotService } from './bot/bot.service';
 // import { CreateMessDto } from 'src/dto/create-mess.dto';
 
 @WebSocketGateway(
@@ -23,18 +24,34 @@ import { UsersService } from './users/users.service';
 
 export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
 
-  constructor(private usersService: UsersService) {}
+  constructor(
+    private usersService: UsersService,
+    private botSevice: BotService
+  ) {}
 
   
   @WebSocketServer() server: Server;
+
   @UseGuards(JwtAuthGuard)
   @SubscribeMessage('send')
   async handleSendMessage(client: Socket, payload: any): Promise<void> {
     const user = client['user']
     console.log('send ', payload)
-    console.log(user)
+    // console.log(user)
     const res = await this.usersService.getUser(user.id)
-    this.server.emit('res', res)
+    const res1 = await this.botSevice.getBots(user.id)
+    this.server.emit('res', {user: res, bots: res1})
+  }
+  
+  @UseGuards(JwtAuthGuard)
+  @SubscribeMessage('createNewBot')
+  async createNewBot(client: Socket, payload: any): Promise<void> {
+    const user = client['user']
+    console.log('createNewBot ', payload)
+    console.log(user)
+    // const res = await this.usersService.getUser(user.id)
+    // const res1 = await this.botSevice.getBots(user.id)
+    this.server.emit('res', {user: 'createNewBot'})
   }
 
   afterInit() {
