@@ -1,15 +1,16 @@
 import * as mongoose from 'mongoose';
 
 export const BotSchema = new mongoose.Schema({
-  botId: {type: Number},
+  // botId: {type: Number},
   owner: {type: Number},
   token: {type: String},
-  status: {type: Boolean, default: false}
+  status: {type: Boolean}
 }, {timestamps: true})
 
 export interface Bot {
-   id: number,
+  //  id: number,
   _id: string,
   owner: string,
-  token: string
+  token: string,
+  status: boolean
 }

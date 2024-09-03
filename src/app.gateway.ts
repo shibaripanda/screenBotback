@@ -42,17 +42,6 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     const res1 = await this.botSevice.getBots(user.id)
     this.server.emit('res', {user: res, bots: res1})
   }
-  
-  @UseGuards(JwtAuthGuard)
-  @SubscribeMessage('createNewBot')
-  async createNewBot(client: Socket, payload: any): Promise<void> {
-    const user = client['user']
-    console.log('createNewBot ', payload)
-    console.log(user)
-    // const res = await this.usersService.getUser(user.id)
-    // const res1 = await this.botSevice.getBots(user.id)
-    this.server.emit('res', {user: 'createNewBot'})
-  }
 
   afterInit() {
     console.log('WebSocket server start')
