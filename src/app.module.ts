@@ -7,13 +7,15 @@ import { UsersModule } from './users/users.module'
 import { AppGateway } from './app.gateway'
 import { BotModule } from './bot/bot.module';
 // import { BotService } from './bot/bot.service'
+import { ScreenModule } from './screen/screen.module';
 
 @Module({
   imports: [
     MongooseModule.forRoot(process.env.MONGO_TOKEN), 
     UsersModule, 
     BotModule,
-    AuthModule
+    AuthModule,
+    ScreenModule
   ],
   // controllers: [AppController],
   providers: [AppService, AppGateway],

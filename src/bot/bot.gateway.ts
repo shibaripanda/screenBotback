@@ -29,20 +29,50 @@ export class BotGateway {
   @SubscribeMessage('createNewBot')
   async createNewBot(client: Socket, payload: any): Promise<void> {
     const user = client['user']
-    console.log('createNewBot ', payload)
-    console.log(user)
-    const res = await this.botSevice.createBot(user.id, payload.token)
+    const res = await this.botSevice.createBot(user.id, payload)
     this.server.emit('createNewBot', res)
+    if(res === 'Bot created! ✅'){
+      const bots = await this.botSevice.getBots(user.id)
+      this.server.emit('getMyBots', bots)
+      // this.server.to(process.env.SERVER_ROOM).emit('onBot', payload)
+    } 
   }
 
   @UseGuards(JwtAuthGuard)
   @SubscribeMessage('getMyBots')
-  async getBots(client: Socket, payload: any): Promise<void> {
+  async getBots(client: Socket): Promise<void> {
     const user = client['user']
-    console.log('getMyBots ', payload)
-    console.log(user)
     const res = await this.botSevice.getBots(user.id)
     this.server.emit('getMyBots', res)
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @SubscribeMessage('deleteBot')
+  async deleteBot(client: Socket, payload: any): Promise<void> {
+    const user = client['user']
+    await this.botSevice.deleteBot(user.id, payload)
+    const res = await this.botSevice.getBots(user.id)
+    this.server.emit('getMyBots', res)
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @SubscribeMessage('offBot')
+  async offBot(client: Socket, payload: any): Promise<void> {
+    const user = client['user']
+    await this.botSevice.offBot(user.id, payload)
+    const res = await this.botSevice.getBots(user.id)
+    this.server.emit('getMyBots', res)
+    this.server.to(process.env.SERVER_ROOM).emit('offBot', payload)
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @SubscribeMessage('onBot')
+  async onBot(client: Socket, payload: any): Promise<void> {
+    const user = client['user']
+    await this.botSevice.onBot(user.id, payload)
+    const res = await this.botSevice.getBots(user.id)
+    this.server.emit('getMyBots', res)
+    this.server.to(process.env.SERVER_ROOM).emit('onBot', payload)
   }
 
 }

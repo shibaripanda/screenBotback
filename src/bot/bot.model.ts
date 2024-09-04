@@ -4,7 +4,9 @@ export const BotSchema = new mongoose.Schema({
   // botId: {type: Number},
   owner: {type: Number},
   token: {type: String},
-  status: {type: Boolean}
+  status: {type: Boolean},
+  name: {type: String},
+  username: {type: String},
 }, {timestamps: true})
 
 export interface Bot {
@@ -12,5 +14,7 @@ export interface Bot {
   _id: string,
   owner: string,
   token: string,
-  status: boolean
+  status: boolean,
+  name: string,
+  username: string,
 }

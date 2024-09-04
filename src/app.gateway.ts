@@ -32,6 +32,13 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
   
   @WebSocketServer() server: Server;
 
+  @SubscribeMessage('helloFromServer')
+  async testServerBot(client: Socket, payload: any): Promise<void> {
+    if(payload === process.env.SERVER_TOKEN){
+      process.env.SERVER_ROOM = client.id
+    }
+  }
+
   @UseGuards(JwtAuthGuard)
   @SubscribeMessage('send')
   async handleSendMessage(client: Socket, payload: any): Promise<void> {
