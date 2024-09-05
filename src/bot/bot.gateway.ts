@@ -39,11 +39,20 @@ export class BotGateway {
   }
 
   @UseGuards(JwtAuthGuard)
+  @SubscribeMessage('getBot')
+  async getBot(client: Socket, payload: any): Promise<void> {
+    const user = client['user']
+    const res = await this.botSevice.getBot(user.id, payload)
+    this.server.emit('getBot', res)
+  }
+
+  @UseGuards(JwtAuthGuard)
   @SubscribeMessage('getMyBots')
   async getBots(client: Socket): Promise<void> {
     const user = client['user']
     const res = await this.botSevice.getBots(user.id)
     this.server.emit('getMyBots', res)
+    console.log('getMyBots')
   }
 
   @UseGuards(JwtAuthGuard)

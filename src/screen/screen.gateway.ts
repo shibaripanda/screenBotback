@@ -37,6 +37,14 @@ export class ScreenGateway {
     // } 
   }
 
+  @UseGuards(JwtAuthGuard)
+  @SubscribeMessage('getScreens')
+  async getBot(client: Socket, payload: any): Promise<void> {
+    // const user = client['user']
+    const res = await this.screenSevice.getScreens(payload)
+    this.server.emit('getScreens', res)
+  }
+
 
 
 }

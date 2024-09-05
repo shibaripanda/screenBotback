@@ -15,4 +15,9 @@ export class ScreenService {
         async createScreen(_id: string, id: number){
             await this.botMongo.create({owner: _id, id: id})
         }
+
+        async getScreens(owner: string){
+            const screens = await this.botMongo.find({owner: owner})
+            return screens
+        }
 }

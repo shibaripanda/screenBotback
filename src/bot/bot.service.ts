@@ -30,6 +30,12 @@ export class BotService {
             return bots
         }
 
+        async getBot(id: number, botId: any){
+            const bot = await this.botMongo.findOne({owner: id, _id: botId}, {token: 0})
+            // console.log('Bots getBots: ' + bots)
+            return bot
+        }
+
         async createBot(id: number, token: string){
             const bot = await this.botMongo.find({token: token})
             if(!bot.length){
