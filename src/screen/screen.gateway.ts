@@ -26,25 +26,39 @@ export class ScreenGateway {
   @WebSocketServer() server: Server;
 
   @UseGuards(JwtAuthGuard)
-  @SubscribeMessage('createNewScreen')
-  async createNewBot(client: Socket, payload: any): Promise<void> {
-    const user = client['user']
-    const res = await this.screenSevice.createScreen(user.id, payload)
-    this.server.emit('createNewBot', res)
-    // if(res === 'Bot created! ✅'){
-    //   const bots = await this.screenSevice.getScreens(user.id)
-    //   this.server.emit('getMyBots', bots)
-    // } 
+  @SubscribeMessage('deleteScreen')
+  async deleteScreen(client: Socket, payload: any): Promise<void> {
+    // const user = client['user']
+    await this.screenSevice.deleteScreen(payload)
+    // const res = await this.screenSevice.getScreens(payload)
+    // this.server.emit('getScreens', res)
+  }
+
+  // @UseGuards(JwtAuthGuard)
+  @SubscribeMessage('newScreen')
+  async newScreen(client: Socket, payload: any): Promise<void> {
+    // const user = client['user']
+    await this.screenSevice.newScreen(payload)
+    // const res = await this.screenSevice.getScreens(payload)
+    // this.server.emit('getScreens', res)
   }
 
   @UseGuards(JwtAuthGuard)
   @SubscribeMessage('getScreens')
-  async getBot(client: Socket, payload: any): Promise<void> {
+  async getScreens(client: Socket, payload: any): Promise<void> {
     // const user = client['user']
     const res = await this.screenSevice.getScreens(payload)
     this.server.emit('getScreens', res)
   }
 
+  @UseGuards(JwtAuthGuard)
+  @SubscribeMessage('sendMeScreen')
+  async sendMeScreen(client: Socket, payload: any): Promise<void> {
+    console.log('sendMeScreen')
+    const user = client['user']
+    // const res = await this.screenSevice.getScreens(payload)
+    this.server.to(process.env.SERVER_ROOM).emit('sendMeScreen', {userId: user.id, screenId: payload.screenId, botId: payload.botId})
+  }
 
 
 }

@@ -16,6 +16,14 @@ export class BotService {
             await this.botMongo.updateOne({owner: id, _id: _id}, {status: false})
         }
 
+        async createNewScreen(id: number, _id: string, screenName: string){
+            await this.botMongo.updateOne({owner: id, _id: _id}, {mode: screenName})
+        }
+        
+        async editModeBot(id: number, _id: string){
+            await this.botMongo.updateOne({owner: id, _id: _id}, {mode: 'edit'})
+        }
+
         async onBot(id: number, _id: string){
             await this.botMongo.updateOne({owner: id, _id: _id}, {status: true})
         }
@@ -42,7 +50,7 @@ export class BotService {
                 const testBotWork = await testBot(token)
                 console.log('testBotWork #' , testBotWork)
                 if(testBotWork){
-                    const newBot = await this.botMongo.create({owner: id, token: token, status: false, name: testBotWork.name, username: testBotWork.username})
+                    const newBot = await this.botMongo.create({owner: id, token: token, status: false, mode: 'work', name: testBotWork.name, username: testBotWork.username})
                     await this.screenService.createZeroScreen(newBot._id)
                     return 'Bot created! ✅'
                 }

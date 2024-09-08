@@ -7,6 +7,7 @@ export const BotSchema = new mongoose.Schema({
   status: {type: Boolean},
   name: {type: String},
   username: {type: String},
+  mode: {type: String},
 }, {timestamps: true})
 
 export interface Bot {
@@ -17,4 +18,5 @@ export interface Bot {
   status: boolean,
   name: string,
   username: string,
+  mode: string
 }
