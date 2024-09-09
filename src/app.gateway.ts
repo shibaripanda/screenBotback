@@ -1,4 +1,4 @@
-import { UseGuards } from '@nestjs/common';
+// import { UseGuards } from '@nestjs/common';
 import {
   OnGatewayConnection,
   OnGatewayDisconnect,
@@ -9,7 +9,7 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 // import { AppService } from 'src/app.service';
-import { JwtAuthGuard } from './auth/jwt-auth.guard';
+// import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { UsersService } from './users/users.service';
 import { BotService } from './bot/bot.service';
 // import { CreateMessDto } from 'src/dto/create-mess.dto';
@@ -39,26 +39,24 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     }
   }
 
-  @UseGuards(JwtAuthGuard)
-  @SubscribeMessage('send')
-  async handleSendMessage(client: Socket, payload: any): Promise<void> {
-    const user = client['user']
-    console.log('send ', payload)
-    // console.log(user)
-    const res = await this.usersService.getUser(user.id)
-    const res1 = await this.botSevice.getBots(user.id)
-    this.server.emit('res', {user: res, bots: res1})
-  }
+  // @UseGuards(JwtAuthGuard)
+  // @SubscribeMessage('send')
+  // async handleSendMessage(client: Socket, payload: any): Promise<void> {
+  //   const user = client['user']
+  //   // console.log('send ', payload)
+  //   // console.log(user)
+  //   const res = await this.usersService.getUser(user.id)
+  //   const res1 = await this.botSevice.getBots(user.id)
+  //   this.server.emit('res', {user: res, bots: res1})
+  // }
 
   afterInit() {
     console.log('WebSocket server start')
   }
   handleConnection(client: Socket) {
-    console.log(client.id)
-    console.log('connect')
+    console.log('connect', client.id)
   }
   handleDisconnect(client: Socket) {
-    console.log(client.id)
-    console.log('dicconnect')
+    console.log('dicconnect', client.id)
   }
 }
