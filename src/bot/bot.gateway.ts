@@ -34,26 +34,23 @@ export class BotGateway {
     if(res === 'Bot created! ✅'){
       const bots = await this.botSevice.getBots(user.id)
       this.server.emit('getMyBots', bots)
-      // this.server.to(process.env.SERVER_ROOM).emit('onBot', payload)
     } 
   }
 
   @UseGuards(JwtAuthGuard)
-  @SubscribeMessage('createNewScreen')
-  async createNewScreen(client: Socket, payload: any): Promise<void> {
+  @SubscribeMessage('nameForNewScreen')
+  async nameForNewScreen(client: Socket, payload: any): Promise<void> {
     console.log(payload)
     const user = client['user']
-    await this.botSevice.createNewScreen(user.id, payload.botId, payload.screenName)
-    // const res = await this.screenSevice.getScreens(payload)
-    // this.server.emit('getScreens', res)
+    await this.botSevice.nameForNewScreen(user.id, payload.botId, payload.screenName)
   }
 
-  @UseGuards(JwtAuthGuard)
-  @SubscribeMessage('editModeBot')
-  async editModeBot(client: Socket, payload: any): Promise<void> {
-    const user = client['user']
-    await this.botSevice.editModeBot(user.id, payload)
-  }
+  // @UseGuards(JwtAuthGuard)
+  // @SubscribeMessage('editModeBot')
+  // async editModeBot(client: Socket, payload: any): Promise<void> {
+  //   const user = client['user']
+  //   await this.botSevice.editModeBot(user.id, payload)
+  // }
 
   @UseGuards(JwtAuthGuard)
   @SubscribeMessage('getBot')

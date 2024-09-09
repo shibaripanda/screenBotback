@@ -47,10 +47,24 @@ export class ScreenService {
             })
         }
 
-        async newScreen(data: any){
-            console.log(data)
-            // await this.botMongo.create({owner: botId, name: 'Start screen1', index: 'screen_1', text: 'Welcom screen! Bot is Active!'})
+        async createNewScreen(botId: string, screenName: string){
+            await this.botMongo.create({
+                owner: botId, 
+                name: screenName, 
+                // index: 'screen_2', 
+                text: '',
+                media: [],
+                document: [],
+                audio: [],
+                buttons: [[{text: 'Link', to: 'google.com', action: 'url'}]],
+                protect: true
+            })
         }
+
+        // async newScreen(data: any){
+        //     console.log(data)
+        //     // await this.botMongo.create({owner: botId, name: 'Start screen1', index: 'screen_1', text: 'Welcom screen! Bot is Active!'})
+        // }
 
         async deleteScreen(id: string){
             await this.botMongo.deleteOne({_id: id})

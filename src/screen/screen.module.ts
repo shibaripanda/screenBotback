@@ -5,9 +5,10 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ScreenSchema } from './screen.model';
 import { AuthModule } from 'src/auth/auth.module';
 import { ScreenGateway } from './screen.gateway';
+import { BotModule } from 'src/bot/bot.module';
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: 'Screen', schema: ScreenSchema }]), forwardRef(() => AuthModule)],
+  imports: [MongooseModule.forFeature([{ name: 'Screen', schema: ScreenSchema }]), forwardRef(() => AuthModule), forwardRef(() => BotModule)],
   controllers: [ScreenController],
   providers: [ScreenService, ScreenGateway],
   exports: [ScreenService]
