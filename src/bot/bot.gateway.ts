@@ -30,34 +30,27 @@ export class BotGateway {
   async createNewBot(client: Socket, payload: any): Promise<void> {
     const user = client['user']
     const res = await this.botSevice.createBot(user.id, payload)
-    this.server.emit('createNewBot', res)
+    this.server.to(client.id).emit('createNewBot', res)
     if(res === 'Bot created! ✅'){
       const bots = await this.botSevice.getBots(user.id)
-      this.server.emit('getMyBots', bots)
+      this.server.to(client.id).emit('getMyBots', bots)
     } 
   }
 
   @UseGuards(JwtAuthGuard)
-  @SubscribeMessage('nameForNewScreen')
-  async nameForNewScreen(client: Socket, payload: any): Promise<void> {
-    console.log(payload)
+  @SubscribeMessage('idForEditScreen')
+  async idForEditScreen(client: Socket, payload: any): Promise<void> {
     const user = client['user']
-    await this.botSevice.nameForNewScreen(user.id, payload.botId, payload.screenName)
+    await this.botSevice.idForEditScreen(user.id, payload.botId, payload.screenId)
   }
-
-  // @UseGuards(JwtAuthGuard)
-  // @SubscribeMessage('editModeBot')
-  // async editModeBot(client: Socket, payload: any): Promise<void> {
-  //   const user = client['user']
-  //   await this.botSevice.editModeBot(user.id, payload)
-  // }
 
   @UseGuards(JwtAuthGuard)
   @SubscribeMessage('getBot')
   async getBot(client: Socket, payload: any): Promise<void> {
+    console.log()
     const user = client['user']
     const res = await this.botSevice.getBot(user.id, payload)
-    this.server.emit('getBot', res)
+    this.server.to(client.id).emit('getBot', res)
   }
 
   @UseGuards(JwtAuthGuard)
@@ -65,7 +58,7 @@ export class BotGateway {
   async getBots(client: Socket): Promise<void> {
     const user = client['user']
     const res = await this.botSevice.getBots(user.id)
-    this.server.emit('getMyBots', res)
+    this.server.to(client.id).emit('getMyBots', res)
     console.log('getMyBots')
   }
 
@@ -76,7 +69,7 @@ export class BotGateway {
     this.server.to(process.env.SERVER_ROOM).emit('offBot', payload)
     await this.botSevice.deleteBot(user.id, payload)
     const res = await this.botSevice.getBots(user.id)
-    this.server.emit('getMyBots', res)
+    this.server.to(client.id).emit('getMyBots', res)
   }
 
   @UseGuards(JwtAuthGuard)
@@ -85,7 +78,7 @@ export class BotGateway {
     const user = client['user']
     await this.botSevice.offBot(user.id, payload)
     const res = await this.botSevice.getBots(user.id)
-    this.server.emit('getMyBots', res)
+    this.server.to(client.id).emit('getMyBots', res)
     this.server.to(process.env.SERVER_ROOM).emit('offBot', payload)
   }
 
@@ -95,7 +88,7 @@ export class BotGateway {
     const user = client['user']
     await this.botSevice.onBot(user.id, payload)
     const res = await this.botSevice.getBots(user.id)
-    this.server.emit('getMyBots', res)
+    this.server.to(client.id).emit('getMyBots', res)
     this.server.to(process.env.SERVER_ROOM).emit('onBot', payload)
   }
 

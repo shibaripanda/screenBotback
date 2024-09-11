@@ -61,11 +61,6 @@ export class ScreenService {
             })
         }
 
-        // async newScreen(data: any){
-        //     console.log(data)
-        //     // await this.botMongo.create({owner: botId, name: 'Start screen1', index: 'screen_1', text: 'Welcom screen! Bot is Active!'})
-        // }
-
         async deleteScreen(id: string){
             await this.botMongo.deleteOne({_id: id})
         }
@@ -73,5 +68,14 @@ export class ScreenService {
         async getScreens(owner: string){
             const screens = await this.botMongo.find({owner: owner})
             return screens
+        }
+
+        async getScreen(owner: string, _id: string){
+            const screen = await this.botMongo.findOne({owner: owner, _id: _id})
+            return screen
+        }
+
+        async protectScrreen(owner: string, _id: string, status: boolean){
+            await this.botMongo.updateOne({owner: owner, _id: _id}, {protect: status})
         }
 }

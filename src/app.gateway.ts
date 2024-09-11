@@ -39,17 +39,6 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     }
   }
 
-  // @UseGuards(JwtAuthGuard)
-  // @SubscribeMessage('send')
-  // async handleSendMessage(client: Socket, payload: any): Promise<void> {
-  //   const user = client['user']
-  //   // console.log('send ', payload)
-  //   // console.log(user)
-  //   const res = await this.usersService.getUser(user.id)
-  //   const res1 = await this.botSevice.getBots(user.id)
-  //   this.server.emit('res', {user: res, bots: res1})
-  // }
-
   afterInit() {
     console.log('WebSocket server start')
   }

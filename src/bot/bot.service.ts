@@ -16,14 +16,10 @@ export class BotService {
             await this.botMongo.updateOne({owner: id, _id: _id}, {status: false})
         }
 
-        async nameForNewScreen(id: number, _id: string, screenName: string){
-            await this.botMongo.updateOne({owner: id, _id: _id}, {mode: screenName})
+        async idForEditScreen(id: number, _id: string, screenId: string){
+            await this.botMongo.updateOne({owner: id, _id: _id}, {mode: screenId})
         }
         
-        // async editModeBot(id: number, _id: string){
-        //     await this.botMongo.updateOne({owner: id, _id: _id}, {mode: 'edit'})
-        // }
-
         async onBot(id: number, _id: string){
             await this.botMongo.updateOne({owner: id, _id: _id}, {status: true})
         }
