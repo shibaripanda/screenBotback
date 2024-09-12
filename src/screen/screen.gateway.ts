@@ -27,6 +27,13 @@ export class ScreenGateway {
   
   @WebSocketServer() server: Server;
 
+  @SubscribeMessage('updateScreenInfo')
+  async testServerBot(client: Socket, payload: any): Promise<void> {
+    if(payload.token === process.env.SERVER_TOKEN){
+      console.log(payload.botId)
+    }
+  }
+
   @UseGuards(JwtAuthGuard)
   @SubscribeMessage('deleteScreen')
   async deleteScreen(client: Socket, payload: any): Promise<void> {
