@@ -29,8 +29,9 @@ export class ScreenGateway {
 
   @SubscribeMessage('updateScreenInfo')
   async testServerBot(client: Socket, payload: any): Promise<void> {
-    if(payload.token === process.env.SERVER_TOKEN){
-      console.log(payload.botId)
+    if(payload.token === process.env.SERVER_TOKEN && global['connectUsers'][payload.botId]){
+      const res = await this.screenSevice.getScreens(payload.botId)
+      this.server.to(global['connectUsers'][payload.botId]).emit('getScreens', res)
     }
   }
 
@@ -51,13 +52,16 @@ export class ScreenGateway {
   @SubscribeMessage('createNewScreen')
   async createNewScreen(client: Socket, payload: any): Promise<void> {
     await this.screenSevice.createNewScreen(payload.botId, payload.screenName)
+    const res = await this.screenSevice.getScreens(payload.botId)
+    this.server.to(client.id).emit('getScreens', res)
   }
 
   @UseGuards(JwtAuthGuard)
-  @SubscribeMessage('getScreen')
-  async getScreen(client: Socket, payload: any): Promise<void> {
-    const res = await this.screenSevice.getScreen(payload.botId, payload.screenId)
-    this.server.to(client.id).emit('getScreen', res)
+  @SubscribeMessage('clearScreen')
+  async clearScreen(client: Socket, payload: any): Promise<void> {
+    await this.screenSevice.clearScreen(payload.botId, payload.screenId)
+    const res = await this.screenSevice.getScreens(payload.botId)
+    this.server.to(client.id).emit('getScreens', res)
   }
 
   @UseGuards(JwtAuthGuard)

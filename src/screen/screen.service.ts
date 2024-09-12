@@ -70,9 +70,8 @@ export class ScreenService {
             return screens
         }
 
-        async getScreen(owner: string, _id: string){
-            const screen = await this.botMongo.findOne({owner: owner, _id: _id})
-            return screen
+        async clearScreen(owner: string, _id: string){
+            await this.botMongo.updateOne({owner: owner, _id: _id}, {text: '', media: [], document: [], audio: [], buttons: []})
         }
 
         async protectScrreen(owner: string, _id: string, status: boolean){

@@ -6,6 +6,7 @@ async function bootstrap() {
 
   const PORT = process.env.PORT || 5002
   const app = await NestFactory.create(AppModule)
+  global.connectUsers = {}
   app.enableCors({
     "origin": "*",
     "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",

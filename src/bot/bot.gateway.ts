@@ -41,6 +41,7 @@ export class BotGateway {
   @SubscribeMessage('idForEditScreen')
   async idForEditScreen(client: Socket, payload: any): Promise<void> {
     const user = client['user']
+    global['connectUsers'][payload.botId] = client.id
     await this.botSevice.idForEditScreen(user.id, payload.botId, payload.screenId)
   }
 

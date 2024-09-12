@@ -36,6 +36,7 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
   async testServerBot(client: Socket, payload: any): Promise<void> {
     if(payload === process.env.SERVER_TOKEN){
       process.env.SERVER_ROOM = client.id
+      // console.log(global['connectUsers'][payload.botId])
     }
   }
 
