@@ -9,40 +9,15 @@ export class ScreenService {
         @InjectModel('Screen') private botMongo: Model<Screen>) {}
 
         async createZeroScreen(_id: string){
-            const res = await this.botMongo.create({
-                owner: _id, 
-                name: 'Start screen2', 
-                index: 'screen_2', 
-                text: 'screen_2',
-                media: [],
-                document: [],
-                audio: [],
-                buttons: [[ {text: 'Link', to: 'google.com', action: 'url'}],
-                         [ {text: 'Link1', to: 'google.com', action: 'url'}]],
-                protect: true
-            })
-            const res1 = await this.botMongo.create({
-                owner: _id, 
-                name: 'Start screen1', 
-                index: 'screen_1', 
-                text: 'screen_1',
-                media: [],
-                document: [],
-                audio: [],
-                buttons: [[{text: 'Hello', to: res._id, action: 'callback'}],
-                         [{text: 'Hello1', to: res._id, action: 'callback'}, {text: 'Link1', to: 'google.com', action: 'url'}]],
-                protect: true
-            })
             await this.botMongo.create({
                 owner: _id, 
-                name: 'Start screen0', 
-                index: 'screen_0', 
-                text: 'Welcom screen! Bot is Active!',
+                name: 'Start screen', 
+                // index: 'screen_2', 
+                text: 'Hello, bot service is activated!',
                 media: [],
                 document: [],
                 audio: [],
-                buttons: [[{text: 'Hello', to: res._id, action: 'callback'}, {text: 'Link', to: 'google.com', action: 'url'}],
-                         [{text: 'Hello1', to: res1._id, action: 'callback'}]],
+                buttons: [],
                 protect: true
             })
         }
@@ -56,7 +31,7 @@ export class ScreenService {
                 media: [],
                 document: [],
                 audio: [],
-                buttons: [[{text: 'Link', to: 'google.com', action: 'url'}]],
+                buttons: [],
                 protect: true
             })
         }
