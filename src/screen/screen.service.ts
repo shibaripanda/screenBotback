@@ -25,14 +25,14 @@ export class ScreenService {
         async createNewScreen(botId: string, screenName: string){
             await this.botMongo.create({
                 owner: botId, 
-                name: screenName, 
-                // index: 'screen_2', 
+                name: screenName,
                 text: '',
                 media: [],
                 document: [],
                 audio: [],
                 buttons: [],
-                protect: true
+                protect: true,
+                variable: ''
             })
         }
 
@@ -55,6 +55,10 @@ export class ScreenService {
 
         async updateVariable(owner: string, _id: string, variable: string){
             await this.botMongo.updateOne({owner: owner, _id: _id}, {variable: variable})
+        }
+
+        async screenForAnswer(owner: string, _id: string, ansScreen: string){
+            await this.botMongo.updateOne({owner: owner, _id: _id}, {ansScreen: ansScreen})
         }
 
         async protectScrreen(owner: string, _id: string, status: boolean){
