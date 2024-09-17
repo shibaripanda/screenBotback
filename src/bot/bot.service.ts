@@ -46,7 +46,7 @@ export class BotService {
                 const testBotWork = await testBot(token)
                 console.log('testBotWork #' , testBotWork)
                 if(testBotWork){
-                    const newBot = await this.botMongo.create({owner: id, token: token, status: false, mode: 'work', name: testBotWork.name, username: testBotWork.username})
+                    const newBot = await this.botMongo.create({owner: id, token: token, status: false, mode: '', name: testBotWork.name, username: testBotWork.username})
                     await this.screenService.createZeroScreen(newBot._id)
                     return 'Bot created! ✅'
                 }

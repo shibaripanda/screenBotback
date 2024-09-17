@@ -53,6 +53,10 @@ export class ScreenService {
             await this.botMongo.updateOne({owner: owner, _id: _id}, {buttons: buttons})
         }
 
+        async updateVariable(owner: string, _id: string, variable: string){
+            await this.botMongo.updateOne({owner: owner, _id: _id}, {variable: variable})
+        }
+
         async protectScrreen(owner: string, _id: string, status: boolean){
             await this.botMongo.updateOne({owner: owner, _id: _id}, {protect: status})
         }

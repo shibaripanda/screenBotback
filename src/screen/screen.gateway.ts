@@ -56,6 +56,14 @@ export class ScreenGateway {
   }
 
   @UseGuards(JwtAuthGuard)
+  @SubscribeMessage('updateVariable')
+  async updateVariable(client: Socket, payload: any): Promise<void> {
+    await this.screenSevice.updateVariable(payload.botId, payload.screenId, payload.variable)
+    const res = await this.screenSevice.getScreens(payload.botId)
+    this.server.to(client.id).emit('getScreens', res)
+  }
+
+  @UseGuards(JwtAuthGuard)
   @SubscribeMessage('createNewScreen')
   async createNewScreen(client: Socket, payload: any): Promise<void> {
     await this.screenSevice.createNewScreen(payload.botId, payload.screenName)
