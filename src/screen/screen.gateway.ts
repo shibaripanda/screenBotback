@@ -88,6 +88,14 @@ export class ScreenGateway {
   }
 
   @UseGuards(JwtAuthGuard)
+  @SubscribeMessage('copyScreen')
+  async copyScreen(client: Socket, payload: any): Promise<void> {
+    await this.screenSevice.copyScreen(payload.botId, payload.screenId)
+    const res = await this.screenSevice.getScreens(payload.botId)
+    this.server.to(client.id).emit('getScreens', res)
+  }
+
+  @UseGuards(JwtAuthGuard)
   @SubscribeMessage('getScreens')
   async getScreens(client: Socket, payload: any): Promise<void> {
     const res = await this.screenSevice.getScreens(payload)

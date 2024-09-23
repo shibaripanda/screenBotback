@@ -21,4 +21,13 @@ export class UsersService {
         return user
     }
 
+    async getUsers(botId: number){
+        console.log('User getUsers')
+        const link = `activBot.${botId}`
+        const users = await this.userMongo.find({[link]: true || false}, {id: 1, activBot: 1, data: 1})
+        // console.log(users)
+        // console.log('User getUsers: ', users.map(item => ({_id: item._id.toString(), data: item.data[botId], activBot: item.activBot[botId]})))
+        return users.map(item => ({_id: item._id.toString(), data: item.data[botId], activBot: item.activBot[botId]}))
+    }
+
 }

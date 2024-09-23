@@ -36,6 +36,21 @@ export class ScreenService {
             })
         }
 
+        async copyScreen(botId: string, screenId: string){
+            const screen = await this.botMongo.findOne({owner: botId, _id: screenId})
+            await this.botMongo.create({
+                owner: botId, 
+                name: screen['name'] + ' (copy) ' + Date.now(),
+                text: screen['text'],
+                media: screen['media'],
+                document: screen['document'],
+                audio: screen['audio'],
+                buttons: screen['buttons'],
+                protect: screen['protect'],
+                variable: screen['variable']
+            })
+        }
+
         async deleteScreen(id: string){
             await this.botMongo.deleteOne({_id: id})
         }
