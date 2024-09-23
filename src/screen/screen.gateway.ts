@@ -109,5 +109,19 @@ export class ScreenGateway {
     this.server.to(process.env.SERVER_ROOM).emit('sendMeScreen', {userId: user.id, screenId: payload.screenId, botId: payload.botId})
   }
 
+  @UseGuards(JwtAuthGuard)
+  @SubscribeMessage('sendScreenToUser')
+  async sendScreenToUser(client: Socket, payload: any): Promise<void> {
+    // const user = client['user']
+    this.server.to(process.env.SERVER_ROOM).emit('sendScreenToUser', {userId: payload.to, screenId: payload.screenId, botId: payload.botId})
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @SubscribeMessage('sendTextToUser')
+  async sendTextToUser(client: Socket, payload: any): Promise<void> {
+    // const user = client['user']
+    this.server.to(process.env.SERVER_ROOM).emit('sendTextToUser', {userId: payload.to, text: payload.text, botId: payload.botId})
+  }
+
 
 }

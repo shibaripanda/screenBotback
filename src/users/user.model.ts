@@ -4,7 +4,8 @@ export const UsersSchema = new mongoose.Schema({
   id: {type: Number},
   data: {type: Object},
   activBot: {type: Object},
-  username: {type: String}
+  username: {type: String},
+  screen: {type: Object}
 }, {timestamps: true})
 
 export interface User {
@@ -12,5 +13,6 @@ export interface User {
   _id: string,
   data: object,
   activBot: object,
-  username: string
+  username: string,
+  screen: object
 }
