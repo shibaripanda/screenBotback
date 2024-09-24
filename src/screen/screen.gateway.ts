@@ -48,6 +48,22 @@ export class ScreenGateway {
   }
 
   @UseGuards(JwtAuthGuard)
+  @SubscribeMessage('editScreenName')
+  async editScreenName(client: Socket, payload: any): Promise<void> {
+    await this.screenSevice.editScreenName(payload.botId, payload.screenId, payload.name)
+    const res = await this.screenSevice.getScreens(payload.botId)
+    this.server.to(client.id).emit('getScreens', res)
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @SubscribeMessage('deleteContentItem')
+  async deleteContentItem(client: Socket, payload: any): Promise<void> {
+    await this.screenSevice.deleteContentItem(payload.botId, payload.screenId, payload.content, payload.index)
+    const res = await this.screenSevice.getScreens(payload.botId)
+    this.server.to(client.id).emit('getScreens', res)
+  }
+
+  @UseGuards(JwtAuthGuard)
   @SubscribeMessage('editButtons')
   async editButtons(client: Socket, payload: any): Promise<void> {
     await this.screenSevice.editButtons(payload.botId, payload.screenId, payload.buttons)

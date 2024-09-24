@@ -64,6 +64,14 @@ export class ScreenService {
             await this.botMongo.updateOne({owner: owner, _id: _id}, {text: '', media: [], document: [], audio: [], buttons: []})
         }
 
+        async deleteContentItem(owner: string, _id: string, content: string, index: number){
+            await this.botMongo.updateOne({owner: owner, _id: _id}, {$pull: {[content]: index}})
+        }
+
+        async editScreenName(owner: string, _id: string, name: string){
+            await this.botMongo.updateOne({owner: owner, _id: _id}, {name: name})
+        }
+
         async editButtons(owner: string, _id: string, buttons: []){
             await this.botMongo.updateOne({owner: owner, _id: _id}, {buttons: buttons})
         }
