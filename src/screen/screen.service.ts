@@ -11,9 +11,18 @@ export class ScreenService {
         async createZeroScreen(_id: string){
             await this.botMongo.create({
                 owner: _id, 
-                name: 'Start screen', 
-                // index: 'screen_2', 
+                name: 'Start screen',
                 text: 'Hello, bot service is activated!',
+                media: [],
+                document: [],
+                audio: [],
+                buttons: [],
+                protect: true
+            })
+            await this.botMongo.create({
+                owner: _id, 
+                name: 'Error screen',
+                text: 'Error, oops!',
                 media: [],
                 document: [],
                 audio: [],
