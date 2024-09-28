@@ -27,15 +27,19 @@ export class UsersService {
         const users = await this.userMongo.find({$or : [{[link]: true}, {[link]: false}]}, {id: 1, activBot: 1, data: 1, username: 1, screen: 1})
         // console.log(users)
         // console.log('User getUsers: ', users.map(item => ({_id: item._id.toString(), data: item.data[botId], activBot: item.activBot[botId]})))
-        console.log(users[0].data[botId])
-        return users.map(item => ({
-            id: item.id, 
-            username: item.username, 
-            _id: item._id.toString(), 
-            data: item.data[botId] ? item.data[botId] : {}, 
-            activBot: item.activBot[botId] ? item.activBot[botId] : false,
-            screen: item.screen[botId] ? item.screen[botId] : ''
-        }))
+        if(users.length){
+            return users.map(item => ({
+                id: item.id, 
+                username: item.username, 
+                _id: item._id.toString(), 
+                data: item.data[botId] ? item.data[botId] : {}, 
+                activBot: item.activBot[botId] ? item.activBot[botId] : false,
+                screen: item.screen[botId] ? item.screen[botId] : ''
+            }))
+        }
+        else{
+            return []
+        }
     }
 
 }
