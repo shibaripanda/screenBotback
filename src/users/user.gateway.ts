@@ -43,6 +43,7 @@ export class UserGateway {
     global['connectUsers'][payload] = client.id
     const res = await this.userSevice.getUsers(payload)
     this.server.to(client.id).emit('getUsers', res)
+    console.log(global['connectUsers'])
   }
 
 

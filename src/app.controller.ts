@@ -8,8 +8,9 @@ export class AppController {
   // async onApplicationBootstrap() {
   // }
 
-  // @Get()
+  // @Get('/')
   // getHello(): string {
-  //   return this.appService.getHello();
+  //   console.log('sdsd')
+  //   return 'this.appService.getHello()';
   // }
 }

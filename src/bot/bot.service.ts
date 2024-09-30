@@ -28,15 +28,31 @@ export class BotService {
             await this.botMongo.deleteOne({owner: id, _id: _id})
         }
 
+        async updateBotInfo(bot: object){
+            const testingBot = await testBot(bot['token'])
+            if(testingBot){
+                if(bot['name'] !== testingBot['name']){
+                    await this.botMongo.updateOne({token: bot['token']}, {name: testingBot['name']})
+                }
+            }
+            else{
+                await this.botMongo.updateOne({token: bot['token']}, {status: false})
+            }
+        }
+
         async getBots(id: number){
+            const botTest = await this.botMongo.find({owner: id}, {token: 1, _id: 0, name: 1})
+            for(const i of botTest){
+               await this.updateBotInfo(i) 
+            }
             const bots = await this.botMongo.find({owner: id}, {token: 0})
-            // console.log('Bots getBots: ' + bots)
             return bots
         }
 
         async getBot(id: number, botId: any){
+            const botTest = await this.botMongo.findOne({owner: id, _id: botId}, {token: 1, _id: 0, name: 1})
+            await this.updateBotInfo(botTest)
             const bot = await this.botMongo.findOne({owner: id, _id: botId}, {token: 0})
-            // console.log('Bots getBots: ' + bots)
             return bot
         }
 

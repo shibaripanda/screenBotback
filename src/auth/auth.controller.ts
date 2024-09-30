@@ -9,7 +9,7 @@ export class AuthController {
 
     @Post('/login')
     login(@Body() data: ReqestAuthDto){
-        // console.log('login', data)
+        console.log('login', data)
         return this.authService.login(data)
     }
 }
