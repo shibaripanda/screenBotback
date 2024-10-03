@@ -49,6 +49,11 @@ export class BotService {
             return bots
         }
 
+        async getContent(id: number, botId: string){
+            const bot = await this.botMongo.findOne({owner: id, _id: botId}, {token: 0})
+            return bot.content
+        }
+
         async getBot(id: number, botId: any){
             const botTest = await this.botMongo.findOne({owner: id, _id: botId}, {token: 1, _id: 0, name: 1})
             await this.updateBotInfo(botTest)
