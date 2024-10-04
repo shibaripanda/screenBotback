@@ -51,7 +51,30 @@ export class BotService {
 
         async getContent(id: number, botId: string){
             const bot = await this.botMongo.findOne({owner: id, _id: botId}, {token: 0})
-            return bot.content
+            return bot.content.reverse()
+        }
+
+        async renameMeContent(id: number, botId: string, content: {}, newName: string){
+            const bot = await this.botMongo.findOneAndUpdate({owner: id, _id: botId},
+                {$set: {'content.$[el].tx': newName}},
+                {arrayFilters: [{'el': content}], returnDocument: "after"})
+            return bot.content.reverse()
+        }
+
+        async deleteContent(id: number, botId: string, content: {}){
+            const bot = await this.botMongo.findOneAndUpdate({owner: id, _id: botId}, {$pull: {content: content}}, {returnDocument: "after"})
+            return bot.content.reverse()
+        }
+
+        async getAddContentMode(id: number, botId: string){
+            const bot = await this.botMongo.findOne({owner: id, _id: botId}, {token: 0})
+            if(bot.mode === 'addContent') return true
+            return false
+        }
+
+        async getContentFromBot(botId: string){
+            const bot = await this.botMongo.findOne({_id: botId}, {token: 0})
+            return bot.content.reverse()
         }
 
         async getBot(id: number, botId: any){

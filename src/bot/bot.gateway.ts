@@ -37,6 +37,21 @@ export class BotGateway {
     } 
   }
 
+  @SubscribeMessage('updateContentInfo')
+  async testServerBot(client: Socket, payload: any): Promise<void> {
+    if(payload.token === process.env.SERVER_TOKEN && global['connectUsers'][payload.botId]){
+      const res = await this.botSevice.getContentFromBot(payload.botId)
+      this.server.to(global['connectUsers'][payload.botId]).emit('getContent', res)
+    }
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @SubscribeMessage('sendMeContent')
+  async sendMeScreen(client: Socket, payload: any): Promise<void> {
+    const user = client['user']
+    this.server.to(process.env.SERVER_ROOM).emit('sendMeContent', {userId: user.id, botId: payload.botId, content: payload.content})
+  }
+
   @UseGuards(JwtAuthGuard)
   @SubscribeMessage('idForEditScreen')
   async idForEditScreen(client: Socket, payload: any): Promise<void> {
@@ -59,6 +74,31 @@ export class BotGateway {
     const user = client['user']
     const res = await this.botSevice.getContent(user.id, payload)
     this.server.to(client.id).emit('getContent', res)
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @SubscribeMessage('deleteContent')
+  async deleteContent(client: Socket, payload: any): Promise<void> {
+    const user = client['user']
+    const res = await this.botSevice.deleteContent(user.id, payload.botId, payload.content)
+    this.server.to(client.id).emit('getContent', res)
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @SubscribeMessage('renameMeContent')
+  async renameMeContent(client: Socket, payload: any): Promise<void> {
+    const user = client['user']
+    const res = await this.botSevice.renameMeContent(user.id, payload.botId, payload.content, payload.newName)
+    this.server.to(client.id).emit('getContent', res)
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @SubscribeMessage('getAddContentMode')
+  async getAddContentMode(client: Socket, payload: any): Promise<void> {
+    const user = client['user']
+    const res = await this.botSevice.getAddContentMode(user.id, payload)
+    console.log(res)
+    this.server.to(client.id).emit('getAddContentMode', res)
   }
 
   @UseGuards(JwtAuthGuard)
