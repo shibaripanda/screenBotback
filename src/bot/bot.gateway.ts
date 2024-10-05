@@ -53,6 +53,13 @@ export class BotGateway {
   }
 
   @UseGuards(JwtAuthGuard)
+  @SubscribeMessage('sendContentToUser')
+  async sendContentToUser(client: Socket, payload: any): Promise<void> {
+    // const user = client['user']
+    this.server.to(process.env.SERVER_ROOM).emit('sendMeContent', {userId: payload.userId, botId: payload.botId, content: payload.content})
+  }
+
+  @UseGuards(JwtAuthGuard)
   @SubscribeMessage('idForEditScreen')
   async idForEditScreen(client: Socket, payload: any): Promise<void> {
     const user = client['user']
