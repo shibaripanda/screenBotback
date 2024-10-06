@@ -76,11 +76,43 @@ export class BotGateway {
   }
 
   @UseGuards(JwtAuthGuard)
+  @SubscribeMessage('renameGroup')
+  async renameGroup(client: Socket, payload: any): Promise<void> {
+    const user = client['user']
+    const res = await this.botSevice.renameGroup(user.id, payload.botId, payload.group, payload.newName)
+    this.server.to(client.id).emit('getGroups', res)
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @SubscribeMessage('deleteGroup')
+  async deleteGroup(client: Socket, payload: any): Promise<void> {
+    const user = client['user']
+    const res = await this.botSevice.deleteGroup(user.id, payload.botId, payload.group)
+    this.server.to(client.id).emit('getGroups', res)
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @SubscribeMessage('createGroup')
+  async createGroup(client: Socket, payload: any): Promise<void> {
+    const user = client['user']
+    const res = await this.botSevice.createGroup(user.id, payload.botId, payload.group)
+    this.server.to(client.id).emit('getGroups', res)
+  }
+
+  @UseGuards(JwtAuthGuard)
   @SubscribeMessage('getContent')
   async getContent(client: Socket, payload: any): Promise<void> {
     const user = client['user']
     const res = await this.botSevice.getContent(user.id, payload)
     this.server.to(client.id).emit('getContent', res)
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @SubscribeMessage('getGroups')
+  async getGroups(client: Socket, payload: any): Promise<void> {
+    const user = client['user']
+    const res = await this.botSevice.getGroups(user.id, payload)
+    this.server.to(client.id).emit('getGroups', res)
   }
 
   @UseGuards(JwtAuthGuard)

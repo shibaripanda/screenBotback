@@ -54,14 +54,38 @@ export class BotService {
             return bot.content.reverse()
         }
 
-        async renameMeContent(id: number, botId: string, content: {}, newName: string){
+        async renameGroup(id: number, botId: string, group: any, newName: string){
+            const bot = await this.botMongo.findOneAndUpdate({owner: id, _id: botId}, 
+                {$set: {'groups.$[el].name': newName}},
+                {arrayFilters: [{'el': group}], returnDocument: "after"})
+            return bot.groups
+        }
+
+        async deleteGroup(id: number, botId: string, group: any){
+            const bot = await this.botMongo.findOneAndUpdate({owner: id, _id: botId}, {$pull: {groups: group}}, {returnDocument: "after"})
+            return bot.groups
+        }
+
+        async getGroups(id: number, botId: string){
+            const bot = await this.botMongo.findOne({owner: id, _id: botId}, {token: 0})
+            return bot.groups
+        }
+
+        async createGroup(id: number, botId: string, group: []){
+            const bot = await this.botMongo.findOneAndUpdate({owner: id, _id: botId},
+                {$addToSet: {groups: {name: Date.now(), group: group}}},
+                {returnDocument: "after"})
+            return bot.groups
+        }
+
+        async renameMeContent(id: number, botId: string, content: any, newName: string){
             const bot = await this.botMongo.findOneAndUpdate({owner: id, _id: botId},
                 {$set: {'content.$[el].tx': newName}},
                 {arrayFilters: [{'el': content}], returnDocument: "after"})
             return bot.content.reverse()
         }
 
-        async deleteContent(id: number, botId: string, content: {}){
+        async deleteContent(id: number, botId: string, content: any){
             const bot = await this.botMongo.findOneAndUpdate({owner: id, _id: botId}, {$pull: {content: content}}, {returnDocument: "after"})
             return bot.content.reverse()
         }

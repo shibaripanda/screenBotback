@@ -8,7 +8,8 @@ export const BotSchema = new mongoose.Schema({
   name: {type: String},
   username: {type: String},
   mode: {type: String},
-  content: {type: Array}
+  content: {type: Array},
+  groups: {type: Array}
 }, {timestamps: true})
 
 export interface Bot {
@@ -20,5 +21,6 @@ export interface Bot {
   name: string,
   username: string,
   mode: string,
-  content: []
+  content: [],
+  groups: []
 }
