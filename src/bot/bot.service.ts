@@ -12,6 +12,25 @@ export class BotService {
         @InjectModel('Bot') private botMongo: Model<Bot>,
         private screenService: ScreenService) {}
 
+        async deleteEvent(id: number, botId: string, event: object){
+            const bot = await this.botMongo.findOneAndUpdate({owner: id, _id: botId},
+                {$pull: {events: event}},
+                {returnDocument: "after"})
+            return bot.events.reverse()
+        }
+
+        async getEvents(id: number, botId: string){
+            const bot = await this.botMongo.findOne({owner: id, _id: botId})
+            return bot.events.reverse()
+        }
+
+        async createEvent(id: number, botId: string, event: object){
+            const bot = await this.botMongo.findOneAndUpdate({owner: id, _id: botId},
+                {$addToSet: {events: event}},
+                {returnDocument: "after"})
+            return bot.events.reverse()
+        }
+
         async offBot(id: number, _id: string){
             await this.botMongo.updateOne({owner: id, _id: _id}, {status: false})
         }

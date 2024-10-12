@@ -37,6 +37,30 @@ export class BotGateway {
     } 
   }
 
+  @UseGuards(JwtAuthGuard)
+  @SubscribeMessage('deleteEvent')
+  async deleteEvent(client: Socket, payload: any): Promise<void> {
+    const user = client['user']
+    const res = await this.botSevice.deleteEvent(user.id, payload.botId, payload.event)
+    this.server.to(client.id).emit('getEvents', res)
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @SubscribeMessage('createEvent')
+  async createEvent(client: Socket, payload: any): Promise<void> {
+    const user = client['user']
+    const res = await this.botSevice.createEvent(user.id, payload.botId, payload.event)
+    this.server.to(client.id).emit('getEvents', res)
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @SubscribeMessage('getEvents')
+  async getEvents(client: Socket, payload: any): Promise<void> {
+    const user = client['user']
+    const res = await this.botSevice.getEvents(user.id, payload)
+    this.server.to(client.id).emit('getEvents', res)
+  }
+
   @SubscribeMessage('updateContentInfo')
   async testServerBot(client: Socket, payload: any): Promise<void> {
     if(payload.token === process.env.SERVER_TOKEN && global['connectUsers'][payload.botId]){
