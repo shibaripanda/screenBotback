@@ -64,6 +64,14 @@ export class ScreenGateway {
   }
 
   @UseGuards(JwtAuthGuard)
+  @SubscribeMessage('addContentItem')
+  async addContentItem(client: Socket, payload: any): Promise<void> {
+    await this.screenSevice.addContentItem(payload.botId, payload.screenId, payload.content)
+    const res = await this.screenSevice.getScreens(payload.botId)
+    this.server.to(client.id).emit('getScreens', res)
+  }
+
+  @UseGuards(JwtAuthGuard)
   @SubscribeMessage('editButtons')
   async editButtons(client: Socket, payload: any): Promise<void> {
     await this.screenSevice.editButtons(payload.botId, payload.screenId, payload.buttons)

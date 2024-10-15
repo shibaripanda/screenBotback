@@ -73,6 +73,30 @@ export class ScreenService {
             await this.botMongo.updateOne({owner: owner, _id: _id}, {text: '', media: [], document: [], audio: [], buttons: []})
         }
 
+        async addContentItem(owner: string, _id: string, content: string){
+            console.log('ddd')
+            console.log(content['type'])
+            if(content['type'] === 'text'){
+                await this.botMongo.updateOne({owner: owner, _id: _id}, {text: content['media']})
+            }
+            else if(['photo', 'video'].includes(content['type'])){
+                await this.botMongo.updateOne({owner: owner, _id: _id}, {$addToSet: {media: content}}) 
+                const res = await this.botMongo.findOne({owner: owner, _id: _id}, {media: 1})
+                if(res['media'].length > 9){
+                    res['media'].splice(0, 1)
+                    await this.botMongo.updateOne({owner: owner, _id: _id}, {media: res['media']})
+                }
+            }
+            else{
+                await this.botMongo.updateOne({owner: owner, _id: _id}, {$addToSet: {[content['type']]: content}})
+                const res = await this.botMongo.findOne({owner: owner, _id: _id}, {[content['type']]: 1})
+                if(res[content['type']].length > 9){
+                    res[content['type']].splice(0, 1)
+                    await this.botMongo.updateOne({owner: owner, _id: _id}, {[content['type']]: res[content['type']]})
+                }
+            }
+        }
+
         async deleteContentItem(owner: string, _id: string, content: string, index: number){
             await this.botMongo.updateOne({owner: owner, _id: _id}, {$pull: {[content]: index}})
         }
