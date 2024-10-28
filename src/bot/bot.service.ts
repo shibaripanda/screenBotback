@@ -12,6 +12,14 @@ export class BotService {
         @InjectModel('Bot') private botMongo: Model<Bot>,
         private screenService: ScreenService) {}
 
+
+        async updateEvent(id: number, botId: string, event: object, editedEvent: object){
+            const bot = await this.botMongo.findOneAndUpdate({owner: id, _id: botId},
+                {$set: {'events.$[el]': editedEvent}},
+                {arrayFilters: [{'el': event}], returnDocument: "after"})
+            return bot.events.reverse()
+        }
+
         async deleteEvent(id: number, botId: string, event: object){
             const bot = await this.botMongo.findOneAndUpdate({owner: id, _id: botId},
                 {$pull: {events: event}},

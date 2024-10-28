@@ -38,6 +38,14 @@ export class BotGateway {
   }
 
   @UseGuards(JwtAuthGuard)
+  @SubscribeMessage('updateEvent')
+  async updateEvent(client: Socket, payload: any): Promise<void> {
+    const user = client['user']
+    const res = await this.botSevice.updateEvent(user.id, payload.botId, payload.event, payload.newEvent)
+    this.server.to(client.id).emit('getEvents', res)
+  }
+
+  @UseGuards(JwtAuthGuard)
   @SubscribeMessage('deleteEvent')
   async deleteEvent(client: Socket, payload: any): Promise<void> {
     const user = client['user']
